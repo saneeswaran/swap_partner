@@ -11,18 +11,17 @@ class ScannerPage extends StatefulWidget {
 class _ScannerPageState extends State<ScannerPage> {
   String? result;
   Future<String> scanBarcode() async {
-    String? res = await SimpleBarcodeScanner.scanBarcode(
-      context,
-      barcodeAppBar: const BarcodeAppBar(
-        appBarTitle: 'Test',
-        centerTitle: false,
-        enableBackButton: true,
-        backButtonIcon: Icon(Icons.arrow_back_ios),
-      ),
-      isShowFlashIcon: true,
-      delayMillis: 2000,
-      cameraFace: CameraFace.front,
-    );
+    String? res = await SimpleBarcodeScanner.scanBarcode(context,
+        barcodeAppBar: const BarcodeAppBar(
+          appBarTitle: 'Scan Bar Code',
+          centerTitle: true,
+          enableBackButton: true,
+          backButtonIcon: Icon(Icons.arrow_back_ios),
+        ),
+        isShowFlashIcon: true,
+        delayMillis: 2000,
+        cameraFace: CameraFace.back,
+        scanType: ScanType.defaultMode);
     setState(() {
       result = res;
     });
@@ -30,13 +29,19 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    scanBarcode();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    scanBarcode();
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
+      ),
+    );
   }
 }

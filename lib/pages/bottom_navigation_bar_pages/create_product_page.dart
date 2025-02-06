@@ -1,6 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:swap_store/constants/constants.dart';
+import 'package:swap_store/model/partner_product_model.dart';
+import 'package:swap_store/services/partner_product_provider.dart';
 import 'package:swap_store/widgets/custom_elevated_button.dart';
 import 'package:swap_store/widgets/custom_textfield.dart';
 
@@ -156,7 +160,10 @@ class _CreateProductPageState extends State<CreateProductPage> {
                 children: [
                   Expanded(
                     child: CustomTextfield(
-                        text: "Price", controller: productPriceController),
+                      text: "Price",
+                      controller: productPriceController,
+                      keyboardType: TextInputType.number,
+                    ),
                   ),
                   SizedBox(
                     width: size.width * 0.05,
@@ -164,7 +171,8 @@ class _CreateProductPageState extends State<CreateProductPage> {
                   Expanded(
                     child: CustomTextfield(
                         text: "Credit Point",
-                        controller: productSwapPointController),
+                        controller: productSwapPointController,
+                        keyboardType: TextInputType.number),
                   ),
                 ],
               ),
@@ -183,8 +191,25 @@ class _CreateProductPageState extends State<CreateProductPage> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text("Please fill in all the details")));
                         } else {
-                          Navigator.popUntil(context, (route) => route.isFirst);
+                          final newProduct = PartnerProductModel(
+                              productId: int.parse(1.toString()),
+                              imageUrl: networkImage,
+                              productName: productTitleController.text,
+                              productPrice:
+                                  int.parse(productPriceController.text),
+                              category: selectedCategory.toString(),
+                              swapPoints:
+                                  int.parse(productSwapPointController.text));
+
+                          Provider.of<PartnerProductProvider>(context,
+                                  listen: false)
+                              .addProductToCart(newProduct);
                         }
+                        AlertDialog(
+                          content: Card(
+                              child: Text("Your product added sucessfully")),
+                        );
+                        Navigator.popUntil(context, (route) => route.isFirst);
                       },
                       color: Theme.of(context).primaryColor),
                 ),

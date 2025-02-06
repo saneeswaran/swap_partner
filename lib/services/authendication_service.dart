@@ -49,27 +49,7 @@ class AuthendicationService {
   Future<void> loginUser(BuildContext context,
       {required String email, required String password}) async {
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      User? user = userCredential.user;
-
-      if (user != null) {
-        if (context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => BottomNavBar()),
-          );
-        }
-      } else {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Login failed. User does not exist.")),
-          );
-        }
-      }
+      await auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (e) {
       String errorMessage = "Login failed. Please try again.";
       if (e.code == 'user-not-found') {

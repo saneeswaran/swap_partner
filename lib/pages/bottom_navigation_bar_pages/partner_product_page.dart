@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:swap_store/model/customer_product_model.dart';
+import 'package:provider/provider.dart';
+import 'package:swap_store/services/partner_product_provider.dart';
 
 class PartnerProductPage extends StatefulWidget {
   const PartnerProductPage({super.key});
@@ -11,10 +12,11 @@ class PartnerProductPage extends StatefulWidget {
 }
 
 class _PartnerProductPageState extends State<PartnerProductPage> {
-  List dummy = CustomerProductModel.dummy;
   String selectedButton = "Dining";
+
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<PartnerProductProvider>(context).getProduct;
     TextStyle customTitleTextStyle =
         TextStyle(fontSize: 16, color: Colors.black);
     TextStyle cutomPriceTextStyle =
@@ -107,7 +109,7 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               ListView.builder(
-                itemCount: dummy.length,
+                itemCount: product.length,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
@@ -126,7 +128,7 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
                                     image:
-                                        NetworkImage(dummy[index].productImage),
+                                        NetworkImage(product[index].imageUrl),
                                     fit: BoxFit.cover),
                               ),
                             ),
@@ -134,15 +136,15 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                               spacing: size.height * 0.01,
                               children: [
                                 Text(
-                                  "4 Seat limited edition",
+                                  product[index].productName,
                                   style: customTitleTextStyle,
                                 ),
                                 Text(
-                                  "Price  : 50000 ",
+                                  "Price  : ${product[index].productPrice} ",
                                   style: cutomPriceTextStyle,
                                 ),
                                 Text(
-                                  "Swap Points  : 5000",
+                                  "Swap Points  : ${product[index].swapPoints}",
                                   style: cutomPriceTextStyle,
                                 ),
                                 Padding(
