@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:swap_store/pages/auth_screen.dart';
+import 'package:swap_store/pages/auth_screen/auth_screen.dart';
 
 import '../../constants/constants.dart';
 import '../../services/authendication_service.dart';

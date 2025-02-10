@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class ScannerPage extends StatefulWidget {
   const ScannerPage({super.key});
@@ -9,39 +9,66 @@ class ScannerPage extends StatefulWidget {
 }
 
 class _ScannerPageState extends State<ScannerPage> {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
+  String? scannedData;
+  bool isLoading = false;
   String? result;
-  Future<String> scanBarcode() async {
-    String? res = await SimpleBarcodeScanner.scanBarcode(context,
-        barcodeAppBar: const BarcodeAppBar(
-          appBarTitle: 'Scan Bar Code',
-          centerTitle: true,
-          enableBackButton: true,
-          backButtonIcon: Icon(Icons.arrow_back_ios),
-        ),
-        isShowFlashIcon: true,
-        delayMillis: 2000,
-        cameraFace: CameraFace.back,
-        scanType: ScanType.defaultMode);
-    setState(() {
-      result = res;
-    });
-    return res ?? '';
-  }
-
   @override
   Widget build(BuildContext context) {
-    scanBarcode();
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.popUntil(context, (route) => route.isFirst);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
+      appBar: AppBar(title: Text("Scan QR Code")),
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.black54,
+              child:
+                  Center(child: CircularProgressIndicator(color: Colors.white)),
+            ),
+        ],
       ),
     );
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      if (!isLoading) {
+        setState(() {
+          isLoading = true;
+        });
+
+        Future.delayed(Duration(seconds: 1), () {
+          setState(() {
+            scannedData = scanData.code;
+            isLoading = false;
+          });
+
+          _showScanResultDialog(scannedData);
+        });
+      }
+    });
+  }
+
+  void _showScanResultDialog(String? result) {
+    if (result != null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("QR Code Scanned"),
+          content: Text("Result: $result"),
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context), child: Text("OK")),
+          ],
+        ),
+      );
+    }
   }
 }

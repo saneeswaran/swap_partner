@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../pages/bottom_nav_bar.dart';
 
@@ -23,9 +24,7 @@ class AuthendicationService {
         }
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("Login failed. User does not exist.")),
-          );
+          Get.snackbar("", "Login failed. User does not exist.");
         }
       }
     } on FirebaseAuthException catch (e) {
@@ -39,9 +38,7 @@ class AuthendicationService {
       }
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
+        Get.snackbar("title", errorMessage.toString());
       }
     }
   }
@@ -61,9 +58,7 @@ class AuthendicationService {
       }
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMessage)),
-        );
+        Get.snackbar("", errorMessage.toString());
       }
     }
   }

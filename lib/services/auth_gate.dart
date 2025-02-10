@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:swap_store/pages/auth_screen.dart';
+import 'package:swap_store/pages/auth_screen/auth_screen.dart';
 
 import '../pages/bottom_nav_bar.dart';
 

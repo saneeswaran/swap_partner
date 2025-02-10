@@ -1,12 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:swap_store/constants/constants.dart';
 import 'package:swap_store/pages/bottom_nav_bar.dart';
 import 'package:swap_store/services/authendication_service.dart';
 import 'package:swap_store/widgets/custom_elevated_button.dart';
 import 'package:swap_store/widgets/custom_textfield.dart';
-
-import '../services/database_service.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -31,19 +30,12 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isPassCheck2 = true;
   bool isLogin = false;
   int isSelected = 0;
-  List<String> categories = [
-    "Electronics",
-    "Clothing",
-    "Books",
-    "Home Appliances"
-  ];
   String? selectedCategory;
   //loader animation
   bool isLoader = false;
 
   //class
   final auth = AuthendicationService();
-  final db = DatabaseService();
 
   void _togglePasswordView() {
     setState(() {
@@ -162,53 +154,46 @@ class _AuthScreenState extends State<AuthScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CustomTextfield(
-            text: "Store Name",
-            controller: storeNameController,
-          ),
-          CustomTextfield(
             text: "Email",
             controller: emailController,
           ),
           CustomTextfield(
             text: "Phone",
             controller: phoneController,
+            prefix: "+91",
           ),
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey, width: 2)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey, width: 2)),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: Colors.grey, width: 2)),
-            ),
-            isExpanded: true,
-            hint: Text(
-              "Select Category",
-            ),
-            value: selectedCategory,
-            onChanged: (String? newValue) {
-              setState(() {
-                selectedCategory = newValue;
-              });
-            },
-            items: categories.map((String category) {
-              return DropdownMenuItem<String>(
-                value: category,
-                child: Text(
-                  category,
-                  style: TextStyle(color: Colors.black45),
-                ),
-              );
-            }).toList(),
-          ),
-          CustomTextfield(
-            text: "Location",
-            controller: locationController,
-          ),
+          // DropdownButtonFormField<String>(
+          //   decoration: InputDecoration(
+          //     focusedBorder: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(12),
+          //         borderSide: BorderSide(color: Colors.grey, width: 2)),
+          //     enabledBorder: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(12),
+          //         borderSide: BorderSide(color: Colors.grey, width: 2)),
+          //     border: OutlineInputBorder(
+          //         borderRadius: BorderRadius.circular(12),
+          //         borderSide: BorderSide(color: Colors.grey, width: 2)),
+          //   ),
+          //   isExpanded: true,
+          //   hint: Text(
+          //     "Select Category",
+          //   ),
+          //   value: selectedCategory,
+          //   onChanged: (String? newValue) {
+          //     setState(() {
+          //       selectedCategory = newValue;
+          //     });
+          //   },
+          //   items: categories.map((String category) {
+          //     return DropdownMenuItem<String>(
+          //       value: category,
+          //       child: Text(
+          //         category,
+          //         style: TextStyle(color: Colors.black45),
+          //       ),
+          //     );
+          //   }).toList(),
+          // ),
           CustomTextfield(
             text: "Password",
             icon: isPassCheck1 ? Icons.visibility : Icons.visibility_off,
@@ -233,34 +218,23 @@ class _AuthScreenState extends State<AuthScreen> {
                       emailController.text.isEmpty ||
                       phoneController.text.isEmpty ||
                       locationController.text.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Please fill all the fields")));
+                    Get.snackbar("Error", "Please fill the details");
                   }
 
                   if (passwordController.text !=
                       confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Passwords do not match")),
-                    );
+                    Get.snackbar("Error", "Password does not match");
                   }
                   if (passwordController.text.length < 8) {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            "The password must be at least 8 characters long")));
+                    Get.snackbar("Error",
+                        " The password must be at least 8 characters long");
                   }
+
                   try {
                     auth.createUser(context,
                         email: emailController.text,
                         password: passwordController.text);
                     User? user = FirebaseAuth.instance.currentUser;
-
-                    final currentContext = context;
-                    db.createData(currentContext,
-                        storeName: storeNameController.text,
-                        phoneNumber: int.parse(phoneController.text),
-                        category: selectedCategory.toString(),
-                        location: locationController.text);
-                    if (!mounted) return;
                     if (user != null) {
                       Navigator.pushReplacement(
                           context,
@@ -268,8 +242,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               builder: (context) => BottomNavBar()));
                     }
                   } on FirebaseAuthException catch (e) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(e.toString())));
+                    Get.snackbar("", e.toString());
                   }
                 },
                 color: buttonColor),

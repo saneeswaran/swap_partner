@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-import 'package:swap_store/constants/constants.dart';
+
 import 'package:swap_store/model/partner_product_model.dart';
-import 'package:swap_store/services/partner_product_provider.dart';
+
 import 'package:swap_store/widgets/custom_elevated_button.dart';
 import 'package:swap_store/widgets/custom_textfield.dart';
 
@@ -22,13 +22,6 @@ class _CreateProductPageState extends State<CreateProductPage> {
   final TextEditingController productSwapPointController =
       TextEditingController();
 
-  //category
-  List<String> categories = [
-    "Electronics",
-    "Clothing",
-    "Books",
-    "Home Appliances"
-  ];
   String? selectedCategory;
   //image picker
   File? image;
@@ -188,23 +181,9 @@ class _CreateProductPageState extends State<CreateProductPage> {
                             productPriceController.text.isEmpty ||
                             productTitleController.text.isEmpty ||
                             productSwapPointController.text.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text("Please fill in all the details")));
-                        } else {
-                          final newProduct = PartnerProductModel(
-                              productId: int.parse(1.toString()),
-                              imageUrl: networkImage,
-                              productName: productTitleController.text,
-                              productPrice:
-                                  int.parse(productPriceController.text),
-                              category: selectedCategory.toString(),
-                              swapPoints:
-                                  int.parse(productSwapPointController.text));
-
-                          Provider.of<PartnerProductProvider>(context,
-                                  listen: false)
-                              .addProductToCart(newProduct);
+                          Get.snackbar("", "Please fill the details");
                         }
+
                         AlertDialog(
                           content: Card(
                               child: Text("Your product added sucessfully")),

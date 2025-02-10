@@ -1,8 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:swap_store/services/partner_product_provider.dart';
+import 'package:swap_store/constants/constants.dart';
 
 class PartnerProductPage extends StatefulWidget {
   const PartnerProductPage({super.key});
@@ -16,7 +15,6 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<PartnerProductProvider>(context).getProduct;
     TextStyle customTitleTextStyle =
         TextStyle(fontSize: 16, color: Colors.black);
     TextStyle cutomPriceTextStyle =
@@ -109,7 +107,7 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               ListView.builder(
-                itemCount: product.length,
+                itemCount: 2,
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
@@ -127,8 +125,7 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 image: DecorationImage(
-                                    image:
-                                        NetworkImage(product[index].imageUrl),
+                                    image: NetworkImage(networkImage),
                                     fit: BoxFit.cover),
                               ),
                             ),
@@ -136,15 +133,15 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
                               spacing: size.height * 0.01,
                               children: [
                                 Text(
-                                  product[index].productName,
+                                  "product name",
                                   style: customTitleTextStyle,
                                 ),
                                 Text(
-                                  "Price  : ${product[index].productPrice} ",
+                                  "Price  : ",
                                   style: cutomPriceTextStyle,
                                 ),
                                 Text(
-                                  "Swap Points  : ${product[index].swapPoints}",
+                                  "Swap Points  : ",
                                   style: cutomPriceTextStyle,
                                 ),
                                 Padding(
@@ -199,7 +196,7 @@ class _PartnerProductPageState extends State<PartnerProductPage> {
               : Colors.grey,
         ),
         backgroundColor: selectedButton == label
-            ? Theme.of(context).primaryColor.withOpacity(0.1)
+            ? Theme.of(context).primaryColor.withOpacity(.1)
             : Colors.transparent,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),

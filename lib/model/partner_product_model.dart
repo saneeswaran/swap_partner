@@ -14,3 +14,14 @@ class PartnerProductModel {
     required this.swapPoints,
   });
 }
+
+List<String> categories = [
+  "Electronics",
+  "Clothing",
+  "Books",
+  "Home Appliances",
+  "Dining",
+  "Bed",
+  "Wardrobe",
+  "Sofa"
+];

@@ -8,6 +8,8 @@ class CustomTextfield extends StatelessWidget {
   final VoidCallback? onPressed;
   final TextEditingController controller;
   final Color color;
+  final String prefix;
+
   const CustomTextfield(
       {super.key,
       required this.text,
@@ -16,7 +18,8 @@ class CustomTextfield extends StatelessWidget {
       this.obScure = false,
       this.onPressed,
       required this.controller,
-      this.color = Colors.grey});
+      this.color = Colors.grey,
+      this.prefix = ""});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,10 @@ class CustomTextfield extends StatelessWidget {
       controller: controller,
       obscureText: obScure,
       decoration: InputDecoration(
+          prefix: Text(
+            prefix,
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: color, width: 2)),
