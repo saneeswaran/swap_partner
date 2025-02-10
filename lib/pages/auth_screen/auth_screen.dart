@@ -16,10 +16,8 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   //controllers for sign up
-  TextEditingController storeNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
@@ -30,9 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isPassCheck2 = true;
   bool isLogin = false;
   int isSelected = 0;
-  String? selectedCategory;
-  //loader animation
-  bool isLoader = false;
+  //String? selectedCategory;
 
   //class
   final auth = AuthendicationService();
@@ -160,7 +156,8 @@ class _AuthScreenState extends State<AuthScreen> {
           CustomTextfield(
             text: "Phone",
             controller: phoneController,
-            prefix: "+91",
+            keyboardType: TextInputType.number,
+            maxLength: 10,
           ),
           // DropdownButtonFormField<String>(
           //   decoration: InputDecoration(
@@ -213,36 +210,24 @@ class _AuthScreenState extends State<AuthScreen> {
             width: size.width * 0.50,
             child: CustomElevatedButton(
                 text: "Sign Up",
-                onPressed: () {
-                  if (storeNameController.text.isEmpty ||
-                      emailController.text.isEmpty ||
-                      phoneController.text.isEmpty ||
-                      locationController.text.isEmpty) {
+                onPressed: () async {
+                  if (emailController.text.isEmpty ||
+                      phoneController.text.isEmpty) {
                     Get.snackbar("Error", "Please fill the details");
-                  }
-
-                  if (passwordController.text !=
+                  } else if (passwordController.text !=
                       confirmPasswordController.text) {
                     Get.snackbar("Error", "Password does not match");
-                  }
-                  if (passwordController.text.length < 8) {
+                  } else if (passwordController.text.length < 8) {
                     Get.snackbar("Error",
                         " The password must be at least 8 characters long");
-                  }
-
-                  try {
-                    auth.createUser(context,
-                        email: emailController.text,
-                        password: passwordController.text);
-                    User? user = FirebaseAuth.instance.currentUser;
-                    if (user != null) {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BottomNavBar()));
+                  } else {
+                    try {
+                      await auth.createUser(context,
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim());
+                    } catch (e) {
+                      Get.snackbar("", e.toString());
                     }
-                  } on FirebaseAuthException catch (e) {
-                    Get.snackbar("", e.toString());
                   }
                 },
                 color: buttonColor),
@@ -267,24 +252,19 @@ class _AuthScreenState extends State<AuthScreen> {
             text: "Email",
             controller: loginEmailController,
           ),
-          isLoader
-              ? CircularProgressIndicator()
-              : CustomTextfield(
-                  text: "Password",
-                  icon: isPassCheck1 ? Icons.visibility : Icons.visibility_off,
-                  obScure: isPassCheck1,
-                  onPressed: _togglePasswordView,
-                  controller: loginPasswordController,
-                ),
+          CustomTextfield(
+            text: "Password",
+            icon: isPassCheck1 ? Icons.visibility : Icons.visibility_off,
+            obScure: isPassCheck1,
+            onPressed: _togglePasswordView,
+            controller: loginPasswordController,
+          ),
           SizedBox(
             height: size.height * 0.07,
             width: size.width * 0.50,
             child: CustomElevatedButton(
                 text: "Login",
                 onPressed: () {
-                  setState(() {
-                    isLoader = true;
-                  });
                   auth.loginUser(context,
                       email: loginEmailController.text,
                       password: loginPasswordController.text);
@@ -295,9 +275,6 @@ class _AuthScreenState extends State<AuthScreen> {
                         MaterialPageRoute(
                             builder: (context) => BottomNavBar()));
                   }
-                  setState(() {
-                    isLoader = false;
-                  });
                 },
                 color: buttonColor),
           ),

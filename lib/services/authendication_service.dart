@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../pages/bottom_nav_bar.dart';
+import 'package:swap_store/pages/auth_screen/required_detail_page.dart';
 
 class AuthendicationService {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -19,8 +18,8 @@ class AuthendicationService {
 
       if (user != null) {
         if (context.mounted) {
-          Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => BottomNavBar()));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => RequiredDetailPage()));
         }
       } else {
         if (context.mounted) {

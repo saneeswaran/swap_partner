@@ -8,8 +8,7 @@ class CustomTextfield extends StatelessWidget {
   final VoidCallback? onPressed;
   final TextEditingController controller;
   final Color color;
-  final String prefix;
-
+  final int? maxLength;
   const CustomTextfield(
       {super.key,
       required this.text,
@@ -19,7 +18,7 @@ class CustomTextfield extends StatelessWidget {
       this.onPressed,
       required this.controller,
       this.color = Colors.grey,
-      this.prefix = ""});
+      this.maxLength = null});
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +26,8 @@ class CustomTextfield extends StatelessWidget {
       keyboardType: keyboardType,
       controller: controller,
       obscureText: obScure,
+      maxLength: maxLength,
       decoration: InputDecoration(
-          prefix: Text(
-            prefix,
-            style: TextStyle(color: Colors.grey.shade500),
-          ),
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: color, width: 2)),
