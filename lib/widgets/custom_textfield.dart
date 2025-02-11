@@ -18,7 +18,7 @@ class CustomTextfield extends StatelessWidget {
       this.onPressed,
       required this.controller,
       this.color = Colors.grey,
-      this.maxLength = null});
+      this.maxLength});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +28,7 @@ class CustomTextfield extends StatelessWidget {
       obscureText: obScure,
       maxLength: maxLength,
       decoration: InputDecoration(
+          counterText: "",
           focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: color, width: 2)),
@@ -39,6 +40,38 @@ class CustomTextfield extends StatelessWidget {
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(color: color, width: 2))),
+    );
+  }
+}
+
+class CustomTextFieldWithoutBorder extends StatelessWidget {
+  final String text;
+  final TextEditingController controller;
+  final int? maxLength;
+  const CustomTextFieldWithoutBorder(
+      {super.key,
+      required this.text,
+      required this.controller,
+      this.maxLength});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      maxLength: maxLength,
+      decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none),
+          hintText: text,
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide.none)),
     );
   }
 }
