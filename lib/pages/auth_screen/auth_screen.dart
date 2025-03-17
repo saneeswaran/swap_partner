@@ -73,17 +73,6 @@ class _AuthScreenState extends State<AuthScreen> {
     });
   }
 
-  validator() {
-    if (emailController.text.isEmpty ||
-        usernameController.text.isEmpty ||
-        phoneController.text.isEmpty ||
-        passwordController.text.isEmpty ||
-        userImage == null ||
-        confirmPasswordController.text.isEmpty) {
-      Get.snackbar("Erroe", "Please fill the details");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

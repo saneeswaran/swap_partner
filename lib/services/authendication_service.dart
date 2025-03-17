@@ -18,7 +18,7 @@ class AuthendicationService {
 
       if (user != null) {
         if (context.mounted) {
-          Navigator.push(
+          Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => BottomNavBar()));
         }
       } else {

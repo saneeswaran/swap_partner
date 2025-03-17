@@ -49,6 +49,12 @@ class _RequiredDetailPageState extends State<RequiredDetailPage> {
     }
   }
 
+  clearImage() {
+    setState(() {
+      storeImage = null;
+    });
+  }
+
   Future<File?> compressImage(File file) async {
     final dir = await getTemporaryDirectory();
     final targetPath = "${dir.absolute.path}/compressed.jpg";
@@ -175,9 +181,9 @@ class _RequiredDetailPageState extends State<RequiredDetailPage> {
   final auth = AuthendicationService();
 //sumbitbutton
   sumbitbutton() async {
-    if (shopNameController.text.isNotEmpty ||
-        selectedCategory != null ||
-        storeImage != null) {
+    if (shopNameController.text.isEmpty ||
+        selectedCategory == null ||
+        storeImage == null) {
       Get.snackbar("Error", "Please fill the details");
     } else {
       await auth.createUser(context,
@@ -256,10 +262,10 @@ class _RequiredDetailPageState extends State<RequiredDetailPage> {
                       width: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(30),
                       ),
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: clearImage,
                           icon: Icon(
                             Icons.delete,
                             color: Colors.white,

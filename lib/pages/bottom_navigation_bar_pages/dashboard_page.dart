@@ -33,6 +33,7 @@ class _DashboardPageState extends State<DashboardPage>
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
@@ -68,10 +69,10 @@ class _DashboardPageState extends State<DashboardPage>
               },
               tabs: [
                 Tab(
-                  text: "Orders",
+                  text: "Enquiry",
                 ),
                 Tab(
-                  text: "Transactions",
+                  text: "Accepted",
                 ),
                 Tab(
                   text: "Status",
